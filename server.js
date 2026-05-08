@@ -11,11 +11,17 @@ const upload = multer({ dest: 'uploads/' });
 
 let numbers = [];
 
-if (fs.existsSync('numbers.json')) {
-    numbers = JSON.parse(fs.readFileSync('numbers.json'));
+function loadNumbers() {
+    if (fs.existsSync('numbers.json')) {
+        numbers = JSON.parse(fs.readFileSync('numbers.json'));
+    } else {
+        numbers = [];
+    }
 }
 
-app.post('/upload', upload.single('file'), (req, res) => {
+loadNumbers();
+
+res.send('Upload berhasil');app.post('/upload', upload.single('file'), (req, res) => {
 
     const filePath = req.file.path;
 
@@ -43,7 +49,9 @@ app.get('/get-number/:count', (req, res) => {
 
     const count = parseInt(req.params.count);
 
-    const result = numbers.slice(0, count);
+    loadNumbers();
+
+const result = numbers.slice(0, count);
 
     numbers.splice(0, count);
 
