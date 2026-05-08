@@ -1,24 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>CariWA</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cari Nomor</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="container">
-  <h1>CariWA</h1>
+
+  <div class="logo">CARI NOMOR</div>
 
   <div class="card">
-    <p>Jumlah Nomor Tersedia:</p>
-    <h2 id="count">0</h2>
 
-    <button onclick="ambil(1)">1 Nomor</button>
-    <button onclick="ambil(5)">5 Nomor</button>
-    <button onclick="ambil(25)">25 Nomor</button>
+    <div class="stock">
+      Stok Nomor:
+      <span id="stock">0</span>
+    </div>
 
-    <textarea id="result"></textarea>
+    <button class="amount" onclick="getNumber(1)">
+      Ambil 1 Nomor
+    </button>
+
+    <button class="amount" onclick="getNumber(5)">
+      Ambil 5 Nomor
+    </button>
+
+    <button class="amount" onclick="getNumber(25)">
+      Ambil 25 Nomor
+    </button>
+
+    <div id="result"></div>
+
   </div>
+
 </div>
 
 <script src="script.js"></script>
