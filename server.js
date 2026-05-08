@@ -1,74 +1,65 @@
 const express = require('express');
-const fs = require('fs');
 const multer = require('multer');
+const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 app.use(express.static('public'));
-app.use(express.json());
-
-app.get('/cariwa-gusionfasheng', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/admin.html'));
-});
 
 const upload = multer({ dest: 'uploads/' });
 
-const DB_FILE = 'numbers.json';
+let numbers = [];
 
-if (!fs.existsSync(DB_FILE)) {
-  fs.writeFileSync(DB_FILE, JSON.stringify([]));
+if (fs.existsSync('numbers.json')) {
+    numbers = JSON.parse(fs.readFileSync('numbers.json'));
 }
-
-function getNumbers() {
-  return JSON.parse(fs.readFileSync(DB_FILE));
-}
-
-function saveNumbers(data) {
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2));
-}
-
-app.get('/api/random/:count', (req, res) => {
-  let count = parseInt(req.params.count);
-  let data = getNumbers();
-
-  if (data.length === 0) {
-    return res.json([]);
-  }
-
-  let result = data.splice(0, count);
-  saveNumbers(data);
-
-  res.json(result);
-});
-
-app.get('/api/count', (req, res) => {
-  let data = getNumbers();
-  res.json({ total: data.length });
-});
 
 app.post('/upload', upload.single('file'), (req, res) => {
-  const filePath = req.file.path;
 
-  const content = fs.readFileSync(filePath, 'utf-8');
+    const filePath = req.file.path;
 
-  const lines = content
-    .split('\n')
-    .map(v => v.trim())
-    .filter(v => v.length > 5);
+    const data = fs.readFileSync(filePath, 'utf-8');
 
-  let oldData = getNumbers();
+    const newNumbers = data
+        .split(/\r?\n/)
+        .map(n => n.trim())
+        .filter(n => n);
 
-  oldData.push(...lines);
+    numbers = [...numbers, ...newNumbers];
 
-  saveNumbers(oldData);
+    fs.writeFileSync(
+        'numbers.json',
+        JSON.stringify(numbers, null, 2)
+    );
 
-  fs.unlinkSync(filePath);
+    fs.unlinkSync(filePath);
 
-  res.send('Upload berhasil');
+    res.send('Upload berhasil');
+
 });
 
+app.get('/get-number/:count', (req, res) => {
+
+    const count = parseInt(req.params.count);
+
+    const result = numbers.slice(0, count);
+
+    numbers.splice(0, count);
+
+    fs.writeFileSync(
+        'numbers.json',
+        JSON.stringify(numbers, null, 2)
+    );
+
+    res.json({
+        numbers: result
+    });
+
+});
+
+const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
-  console.log('Server running on port ' + PORT);
+    console.log('Server jalan di port ' + PORT);
 });
