@@ -1,74 +1,38 @@
-const express = require('express');
-const multer = require('multer');
-const fs = require('fs');
-
-const app = express();
-
-app.use(express.static('public'));
-
-const upload = multer({ dest: 'uploads/' });
-
-let numbers = [];
-
-function loadNumbers() {
-    if (fs.existsSync('numbers.json')) {
-        numbers = JSON.parse(fs.readFileSync('numbers.json'));
-    } else {
-        numbers = [];
-    }
-}
-
-loadNumbers();
-
 app.post('/upload', upload.single('file'), (req, res) => {
 
-    const filePath = req.file.path;
+    try {
 
-    const data = fs.readFileSync(filePath, 'utf-8');
+        const filePath = req.file.path;
 
-    const newNumbers = data
-        .split(/\r?\n/)
-        .map(n => n.trim())
-        .filter(n => n);
+        const data = fs.readFileSync(filePath, 'utf8');
 
-    loadNumbers();
+        const newNumbers = data
+            .split(/\r?\n/)
+            .map(n => n.trim())
+            .filter(n => n.length > 0);
 
-    numbers = [...numbers, ...newNumbers];
+        loadNumbers();
 
-    fs.writeFileSync(
-        'numbers.json',
-        JSON.stringify(numbers, null, 2)
-    );
+        numbers.push(...newNumbers);
 
-    fs.unlinkSync(filePath);
+        fs.writeFileSync(
+            'numbers.json',
+            JSON.stringify(numbers, null, 2)
+        );
 
-    res.send('Upload berhasil');
+        fs.unlinkSync(filePath);
 
-});
+        res.json({
+            success: true,
+            total: numbers.length
+        });
 
-app.get('/get-number/:count', (req, res) => {
+    } catch (err) {
 
-    loadNumbers();
+        console.log(err);
 
-    const count = parseInt(req.params.count);
+        res.status(500).send('Upload gagal');
 
-    const result = numbers.slice(0, count);
+    }
 
-    numbers.splice(0, count);
-
-    fs.writeFileSync(
-        'numbers.json',
-        JSON.stringify(numbers, null, 2)
-    );
-
-    res.json({
-        numbers: result
-    });
-
-});
-
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, () => {
-    console.log('Server jalan di port ' + PORT);
 });
