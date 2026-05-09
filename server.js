@@ -10,92 +10,44 @@ const upload = multer({ dest: 'uploads/' });
 
 let numbers = [];
 
-function loadNumbers() {
-    try {
-        if (fs.existsSync('numbers.json')) {
-            numbers = JSON.parse(fs.readFileSync('numbers.json'));
-        } else {
-            numbers = [];
-        }
-    } catch {
-        numbers = [];
-    }
-}
-
-loadNumbers();
-
 app.post('/upload', upload.single('file'), (req, res) => {
 
-    try {
+    const data = fs.readFileSync(req.file.path, 'utf8');
 
-        const filePath = req.file.path;
+    numbers = data
+        .split(/\r?\n/)
+        .map(v => v.trim())
+        .filter(v => v);
 
-        const data = fs.readFileSync(filePath, 'utf8');
+    fs.unlinkSync(req.file.path);
 
-        const newNumbers = data
-            .split(/\r?\n/)
-            .map(n => n.trim())
-            .filter(n => n.length > 0);
+    res.json({
+        success: true,
+        total: numbers.length
+    });
 
-        loadNumbers();
+});
 
-        numbers.push(...newNumbers);
-
-        fs.writeFileSync(
-            'numbers.json',
-            JSON.stringify(numbers, null, 2)
-        );
-
-        fs.unlinkSync(filePath);
-
-        res.json({
-            success: true,
-            total: numbers.length
-        });
-
-    } catch (err) {
-
-        console.log(err);
-
-        res.status(500).send('Upload gagal');
-
-    }
-
+app.get('/stock', (req, res) => {
+    res.json({
+        stock: numbers.length
+    });
 });
 
 app.get('/get-number/:count', (req, res) => {
 
-    try {
+    const count = parseInt(req.params.count);
 
-        loadNumbers();
+    const result = numbers.splice(0, count);
 
-        const count = parseInt(req.params.count);
-
-        const result = numbers.slice(0, count);
-
-        numbers.splice(0, count);
-
-        fs.writeFileSync(
-            'numbers.json',
-            JSON.stringify(numbers, null, 2)
-        );
-
-        res.json({
-            numbers: result
-        });
-
-    } catch (err) {
-
-        console.log(err);
-
-        res.status(500).send('Error');
-
-    }
+    res.json({
+        numbers: result
+    });
 
 });
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log('Server jalan di port ' + PORT);
+    console.log('jalan');
 });

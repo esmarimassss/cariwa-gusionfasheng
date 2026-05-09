@@ -6,8 +6,8 @@ async function ambilNomor() {
 
     const data = await res.json();
 
-    if (!data.numbers || data.numbers.length === 0) {
-        alert('Stok nomor habis');
+    if (!data.numbers.length) {
+        alert('Stok kosong');
         return;
     }
 
@@ -16,4 +16,18 @@ async function ambilNomor() {
     );
 
     alert('Nomor berhasil disalin');
+
+    updateStock();
 }
+
+async function updateStock() {
+
+    const res = await fetch('/stock');
+
+    const data = await res.json();
+
+    document.getElementById('stock').innerText =
+        data.stock;
+}
+
+updateStock();
