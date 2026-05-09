@@ -1,7 +1,6 @@
 const express = require('express');
 const multer = require('multer');
 const fs = require('fs');
-const path = require('path');
 
 const app = express();
 
@@ -21,7 +20,7 @@ function loadNumbers() {
 
 loadNumbers();
 
-res.send('Upload berhasil');app.post('/upload', upload.single('file'), (req, res) => {
+app.post('/upload', upload.single('file'), (req, res) => {
 
     const filePath = req.file.path;
 
@@ -31,6 +30,8 @@ res.send('Upload berhasil');app.post('/upload', upload.single('file'), (req, res
         .split(/\r?\n/)
         .map(n => n.trim())
         .filter(n => n);
+
+    loadNumbers();
 
     numbers = [...numbers, ...newNumbers];
 
@@ -47,11 +48,11 @@ res.send('Upload berhasil');app.post('/upload', upload.single('file'), (req, res
 
 app.get('/get-number/:count', (req, res) => {
 
-    const count = parseInt(req.params.count);
-
     loadNumbers();
 
-const result = numbers.slice(0, count);
+    const count = parseInt(req.params.count);
+
+    const result = numbers.slice(0, count);
 
     numbers.splice(0, count);
 
