@@ -3,76 +3,110 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CariWA</title>
+<title>Cari Nomor</title>
 
 <style>
-body{
-    background:#0f0f0f;
-    color:white;
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
     font-family:Arial;
+}
+
+body{
+    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    height:100vh;
-    margin:0;
+    background:
+    radial-gradient(circle at right, #0d3b66 0%, transparent 30%),
+    linear-gradient(to bottom,#020617,#000814);
+    color:white;
 }
 
-.box{
-    background:#1a1a1a;
+.container{
+    width:340px;
+    background:rgba(10,20,40,0.9);
+    border:1px solid rgba(255,255,255,0.1);
+    border-radius:25px;
     padding:30px;
-    border-radius:20px;
-    width:320px;
-    text-align:center;
+    backdrop-filter:blur(10px);
+    box-shadow:0 0 30px rgba(0,150,255,0.15);
 }
 
 h1{
-    margin-top:0;
+    text-align:center;
+    margin-bottom:20px;
+    font-size:42px;
+    color:#55b7ff;
+}
+
+.stock{
+    text-align:center;
+    font-size:24px;
+    margin-bottom:25px;
 }
 
 input{
     width:100%;
-    padding:12px;
+    padding:16px;
     border:none;
-    border-radius:10px;
-    margin-top:15px;
-    font-size:16px;
-    box-sizing:border-box;
+    border-radius:14px;
+    background:#081426;
+    color:white;
+    font-size:18px;
+    outline:none;
+    margin-bottom:20px;
+    border:1px solid rgba(255,255,255,0.08);
 }
 
 button{
     width:100%;
-    padding:12px;
+    padding:16px;
     border:none;
-    border-radius:10px;
-    margin-top:15px;
-    background:#25D366;
-    color:white;
-    font-size:16px;
+    border-radius:14px;
+    font-size:18px;
+    font-weight:bold;
     cursor:pointer;
+    background:linear-gradient(90deg,#3b82f6,#5ecbff);
+    color:white;
+    transition:0.2s;
 }
 
-.stock{
-    margin-top:15px;
-    color:#aaa;
+button:hover{
+    transform:scale(1.03);
 }
+
+.info{
+    margin-top:20px;
+    text-align:center;
+    color:#8ecfff;
+    font-size:15px;
+}
+
 </style>
-
 </head>
+
 <body>
 
-<div class="box">
+<div class="container">
 
-<h1>CariWA</h1>
+<h1>CARI NOMOR</h1>
 
-<input type="number" id="jumlah" placeholder="Jumlah nomor">
+<div class="stock">
+Stok Nomor:
+<span id="stock">0</span>
+</div>
+
+<input type="number" id="jumlah" placeholder="Masukkan jumlah nomor">
 
 <button onclick="ambilNomor()">
 Ambil Nomor
 </button>
 
-<div class="stock">
-Stock:
-<span id="stock">0</span>
+<div class="info">
+Nomor otomatis tersalin
 </div>
 
 </div>
