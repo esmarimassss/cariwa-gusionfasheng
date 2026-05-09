@@ -1,42 +1,83 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cari Nomor</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CariWA</title>
+
+<style>
+body{
+    background:#0f0f0f;
+    color:white;
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+}
+
+.box{
+    background:#1a1a1a;
+    padding:30px;
+    border-radius:20px;
+    width:320px;
+    text-align:center;
+}
+
+h1{
+    margin-top:0;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    margin-top:15px;
+    font-size:16px;
+    box-sizing:border-box;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    margin-top:15px;
+    background:#25D366;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.stock{
+    margin-top:15px;
+    color:#aaa;
+}
+</style>
+
 </head>
 <body>
 
-<div class="container">
+<div class="box">
 
-  <div class="logo">CARI NOMOR</div>
+<h1>CariWA</h1>
 
-  <div class="card">
+<input type="number" id="jumlah" placeholder="Jumlah nomor">
 
-    <div class="stock">
-      Stok Nomor:
-      <span id="stock">0</span>
-    </div>
+<button onclick="ambilNomor()">
+Ambil Nomor
+</button>
 
-    <button class="amount" onclick="getNumber(1)">
-      Ambil 1 Nomor
-    </button>
-
-    <button class="amount" onclick="getNumber(5)">
-      Ambil 5 Nomor
-    </button>
-
-    <button class="amount" onclick="getNumber(25)">
-      Ambil 25 Nomor
-    </button>
-
-    <div id="result"></div>
-
-  </div>
+<div class="stock">
+Stock:
+<span id="stock">0</span>
+</div>
 
 </div>
 
 <script src="script.js"></script>
+
 </body>
 </html>

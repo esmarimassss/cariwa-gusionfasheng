@@ -7,13 +7,13 @@ async function ambilNomor() {
     const data = await res.json();
 
     if (!data.numbers.length) {
-        alert('Stok kosong');
+        alert('Stock kosong');
         return;
     }
 
-    navigator.clipboard.writeText(
-        data.numbers.join('\n')
-    );
+    const hasil = data.numbers.join('\n');
+
+    navigator.clipboard.writeText(hasil);
 
     alert('Nomor berhasil disalin');
 
